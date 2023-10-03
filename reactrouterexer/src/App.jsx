@@ -1,23 +1,24 @@
 import { BrowserRouter, Routes, Route} from "react-router-dom";
+import NavBar from "./nav";
+import Home from "./home";
+import About from "./about";
+import Vans from "./vans";
+import Footer from "./footer";
+import VanDetails from "./vanDetails";
 
-function Home(){
-  return (
-    <h1 className="text-5xl bg-blue-500 px-5 py-2 font-extrabold h-screen flex justify-center items-center">Hello, react Routers!</h1>
-  )
-}
-
-function About(){
-  return (
-    <h1 className="text-5xl bg-blue-500 px-5 py-2 font-extrabold h-screen flex justify-center items-center">It about to go down!</h1>
-  )
-}
 function App(){
+
+
   return (
     <BrowserRouter>
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/vans" element={<Vans />} />
+        <Route path="/vans/:id" element={<VanDetails />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }

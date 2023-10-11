@@ -5,7 +5,6 @@ export default function VanDetails(){
 
     const params = useParams();
     const [van, setVan] = useState(null);
-    console.log(params)
 
     useEffect(()=>{
         fetch(`/api/vans/${params.id}`)
@@ -27,16 +26,13 @@ export default function VanDetails(){
                     <h2 className='text-3xl font-extrabold'>{van.name}</h2>
                         <p className="font-medium">${van.price} /day</p> 
                     <p className="xl:w-1/2">
-                        The Modest Explorer is a van designed to get you out of the house
-                        and into nature. This beauty is equipped with solar panels, a 
-                        composting toilet, a water tank and kitchenette. The idea is 
-                        that you can pack up your home and escape for a weekend or even longer!
+                        {van.description}
                     </p>
                     <button className="text-white font-extrabold bg-[#FF8C38] rounded-md px-20 py-4 xl:w-1/4">
                         Rent This Van
                     </button>
                 </div>
-            ) : <h2>Loading...</h2>}
+            ) : <h2 className="h-96 flex items-center justify-center text-blue-200 text-5xl font-semibo">Loading...</h2>}
             
         </>
     )

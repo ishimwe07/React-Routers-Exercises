@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import VanComponent from "./vanComponent"
 import "../server"
 
 export default function Vans(){
 
+    const [searchParams, setSearchParams] = useSearchParams()
     const [vansData, setvansData] = useState([]);
 
+    const typeFilter = searchParams.get("type")
+    
     useEffect(()=> {
       fetch("/api/vans")
           .then(response => response.json())
           .then((data)=>setvansData(data.vans))
     }, []);
+
+    const vansToDisplay = typeFilter? vansData.filter(van => van.type === typeFilter) : vansData;
   
-  console.log(vansData)
-    const allVansComponents = vansData.map(van => (<VanComponent 
+    const allVansComponents = vansToDisplay.map(van => (<VanComponent 
         key={van.id}
         id={van.id}
         name={van.name} 
@@ -28,13 +32,31 @@ export default function Vans(){
         <div className="m-14">
             <h1 className="text-4xl font-extrabold mb-5">Explore our van options</h1>
             <div className="flex gap-10 mb-10">
-                <Link to="/thevan" className="bg-[#FFEAD0] rounded-lg px-6 py-1">Simple</Link>
-                <Link to="/thevan" className="bg-[#FFEAD0] rounded-lg px-6 py-1">Luxury</Link>
-                <Link to="/thevan" className="bg-[#FFEAD0] rounded-lg px-6 py-1">Rugged</Link>
-                <Link to="/thevan" className="underline bg-[#FFEAD0] rounded-lg px-6 py-1">Clear Filters</Link>
+                <button
+                 onClick={()=> setSearchParams({type: "simple"})} 
+                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 >
+                    Simple
+                </button>
+                <button
+                 onClick={()=> setSearchParams({type: "luxury"})} 
+                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 >
+                    Luxury
+                </button>
+                <button
+                 onClick={()=> setSearchParams({type: "rugged"})} 
+                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 >
+                    Rugged
+                </button>
+                <Link to="" className="underline bg-[#FFEAD0] rounded-lg px-6 py-1">Clear Filters</Link>
             </div>
             <div className="grid xl:grid-cols-3 grid-cols-2 gap-10 justify-around">
-            {allVansComponents}
+                {
+                    vansData.length? allVansComponents :
+                    <h1 className="flex items-center h-[40vh] justify-center text-5xl text-blue-500 font-semibold">Loading ...</h1>
+                }
             </div>
         </div>
     )

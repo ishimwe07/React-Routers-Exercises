@@ -1,20 +1,19 @@
-import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, useSearchParams, useLoaderData } from "react-router-dom"
 import VanComponent from "./vanComponent"
+import { getVans } from "../api";
 import "../server"
+
+export async function loader (){
+    return await getVans()
+}
 
 export default function Vans(){
 
     const [searchParams, setSearchParams] = useSearchParams()
-    const [vansData, setvansData] = useState([]);
 
     const typeFilter = searchParams.get("type")
-    
-    useEffect(()=> {
-      fetch("/api/vans")
-          .then(response => response.json())
-          .then((data)=>setvansData(data.vans))
-    }, []);
+    const vansData = useLoaderData()
+ 
 
     const vansToDisplay = typeFilter? vansData.filter(van => van.type === typeFilter) : vansData;
   
@@ -26,6 +25,8 @@ export default function Vans(){
         imageUrl={van.imageUrl}
         price={van.price}
         type={van.type}
+        search={`?${searchParams.toString()}`}
+        typeParam = {typeFilter}
         />))
 
     return (
@@ -34,23 +35,23 @@ export default function Vans(){
             <div className="flex gap-10 mb-10">
                 <button
                  onClick={()=> setSearchParams({type: "simple"})} 
-                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 className={`${typeFilter === "simple"? "bg-red-400 underline" :"bg-[#FFEAD0]"} rounded-lg px-6 py-1`}
                  >
                     Simple
                 </button>
                 <button
                  onClick={()=> setSearchParams({type: "luxury"})} 
-                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 className={`${typeFilter === "luxury"? "bg-[#161616] text-yellow-100 underline" :"bg-[#FFEAD0]"} rounded-lg px-6 py-1`}
                  >
                     Luxury
                 </button>
                 <button
                  onClick={()=> setSearchParams({type: "rugged"})} 
-                 className="bg-[#FFEAD0] rounded-lg px-6 py-1"
+                 className={`${typeFilter === "rugged"? "bg-[#115E59] underline" :"bg-[#FFEAD0]"} rounded-lg px-6 py-1`}
                  >
                     Rugged
                 </button>
-                <Link to="" className="underline bg-[#FFEAD0] rounded-lg px-6 py-1">Clear Filters</Link>
+                {typeFilter && <Link to="" className="underline bg-[#FFEAD0] rounded-lg px-6 py-1">Clear Filters</Link>}
             </div>
             <div className="grid xl:grid-cols-3 grid-cols-2 gap-10 justify-around">
                 {

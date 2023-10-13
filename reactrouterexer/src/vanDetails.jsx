@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 
 export default function VanDetails(){
 
     const params = useParams();
     const [van, setVan] = useState(null);
+    const location = useLocation()
 
     useEffect(()=>{
         fetch(`/api/vans/${params.id}`)
@@ -12,12 +13,21 @@ export default function VanDetails(){
             .then(data => setVan(data.vans));
     }, [params.id])
 
-
+    const search = location.state?.search || "";
+    const backType = location.state?.type || "all"
 
     return (
         <>
              {van ? (
+                
                 <div className="grid items-center xl:justify-items-center gap-5 m-20 my-5">
+                    <Link
+                        to={`..${search}`}
+                        relative="path"
+                        className="text-lg hover:underline"
+                        >&larr; <span>Back to {backType} vans</span>
+                    </Link>
+
                     <img src={van.imageUrl} className="rounded h-[70vh]" alt={`The Image of a van named ${van.name}.`} />
                     <button                  className=
                         {`px-5 py-1 xl:w-1/4 ${van.type === "simple"? "bg-[#E17654]" : (van.type === "rugged"? "bg-[#115E59]" : "bg-[#161616]")} rounded-md text-white font-medium`}

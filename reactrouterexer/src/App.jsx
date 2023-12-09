@@ -24,10 +24,10 @@ const routers = createBrowserRouter(createRoutesFromElements(
                   <Route path="vans/:id" element={<VanDetails />} />
 
                   <Route path="host" element={<HostLayout />}>
-                    <Route index element={<Dashboard />}/>
+                    <Route path="dashboard" element={<Dashboard />}/>
                     <Route path="income" element={<Income />}/>
                     <Route path="reviews" element={<Reviews />}/>
-                    <Route path="vans" element={<HostVans />}/>
+                    <Route index element={<HostVans />}/>
 
                     <Route path="vans/:id" element={<HostVanDetail />}>
                       <Route index element={<HostVanInfo />}/>
